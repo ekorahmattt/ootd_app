@@ -1,18 +1,34 @@
+import { forwardRef } from "react";
 import Webcam from "react-webcam";
 
-const videoConstraints:MediaTrackConstraints = {
-    aspectRatio: 16 / 9,
-    facingMode: 'environment'
+interface CameraComponents {
+    width?: number;
+    height?: number;
 }
 
-const Camera = ({
-    deviceId,
-    setImage,
-    timer
-}:{
-    deviceId?: MediaDeviceInfo,
-    setImage: (image: string) => void,
-    timer: number
-}) => {
-    const webcamRef = useReff(null)
-}
+const CameraComp =  forwardRef<Webcam, CameraComponents>((
+    {width = 768, height = 1024}, ref) => {
+        const videoConstraints = {
+            width,
+            height,
+            facingMode: "environment",
+        }
+
+        return (
+            <>
+                <Webcam 
+                    audio={false}
+                    ref={ref} //forwarding ref ke App()
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={videoConstraints}
+                    style={{ 
+                        width: "100%",
+                        height: "auto"
+                     }} 
+                />
+            </>
+        )
+    }
+)
+
+export default CameraComp
