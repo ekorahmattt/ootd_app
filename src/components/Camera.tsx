@@ -11,7 +11,7 @@ const CameraComp =  forwardRef<Webcam, CameraComponents>((
         const videoConstraints = {
             width,
             height,
-            facingMode: "environment",
+            facingMode: "user",
         }
 
         return (
@@ -23,7 +23,7 @@ const CameraComp =  forwardRef<Webcam, CameraComponents>((
                     videoConstraints={videoConstraints}
                     style={{ 
                         width: "100%",
-                        height: "auto"
+                        height: "screen"
                      }} 
                 />
             </>
