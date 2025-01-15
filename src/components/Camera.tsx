@@ -23,7 +23,8 @@ const CameraComp =  forwardRef<Webcam, CameraComponents>((
                     videoConstraints={videoConstraints}
                     style={{ 
                         width: "100%",
-                        height: "screen"
+                        height: "100%",
+                        objectFit: "cover"
                      }} 
                 />
             </>

@@ -21,9 +21,9 @@ export default function App() {
       <div className="grid grid-cols-2">
           <div>
             {image ? (
-              <img src={image} alt="model" className="h-screen" />
+              <img src={image} alt="model" className='h-full object-cover'/>
             ) : (
-              <CameraComp ref={webcamRef} />
+              <CameraComp ref={webcamRef} width={768} height={1024} />
             )}
           </div>
 
