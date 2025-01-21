@@ -7,6 +7,10 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        dark : '#020817',
+        primary: '#0470db',
+      },
       keyframes: {
         appear: {
           "0%": {
