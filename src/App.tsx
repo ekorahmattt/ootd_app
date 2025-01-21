@@ -68,7 +68,7 @@ export default function App() {
 
       if(response.ok){
         const result = await response.json()
-        alert(result.clothes)
+        setImage(result.model_img)
         console.log("Upload Successful", result)
       }else{
         console.error("Upload Failed: ", response.statusText)
@@ -90,7 +90,7 @@ export default function App() {
 
   return (
     <>
-      
+
       <div className="grid grid-cols-2 bg-dark" ref={fullscreenRef}>
 
         {/* Kolom 1 */}
