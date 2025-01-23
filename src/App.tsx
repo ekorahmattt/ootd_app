@@ -121,7 +121,7 @@ export default function App() {
       <div className="grid grid-cols-2 bg-dark" ref={fullscreenRef}>
 
         {/* Kolom 1 */}
-          <div className="w-10/12 flex items-start">
+          <div className="w-full flex items-start">
             
             {/* Tombol Fullscreen */}
             <button className='btn bg-dark border-none' onClick={handleFullscreen}>
