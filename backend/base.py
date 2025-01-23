@@ -14,12 +14,12 @@ def process():
     garment = request.form.get('garment_img')
 
     if model:
-        if os.path.exists(MODEL_PATH):
-            os.remove(MODEL_PATH)
+        if os.path.exists("../public"+MODEL_PATH):
+            os.remove("../public"+MODEL_PATH)
 
         image = Image.open(model)
         cropped_img = ImageOps.fit(image, (768, 1024), centering=(0.5,0.5))
-        cropped_img.save(MODEL_PATH)
+        cropped_img.save("../public"+MODEL_PATH)
 
         return jsonify({
             "message" : "Berhasil Disimpan",

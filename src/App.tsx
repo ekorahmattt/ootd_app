@@ -7,6 +7,7 @@ export default function App() {
   const [image, setImage] = useState<string | null>(null)
   const [garment, setGarment] = useState<string>('tshirt')
   const [model, setModel] = useState<File | null>(null)
+  const [countdown, setCountdown] = useState<number | null>(null)
   const [fullStat,setFullstat] = useState<boolean>(false)
   const fullscreenRef = useRef<HTMLDivElement>(null)
 
@@ -41,6 +42,32 @@ export default function App() {
     }
     if (image) {
       setImage(null)
+    }
+  }
+
+  // Fungsi Hitung mundur
+  const startCountdown = () => {
+    let timeLeft = 3
+    setCountdown(timeLeft)
+    
+    const timer = setInterval(() => {
+      timeLeft -= 1
+      if (timeLeft <= 0){
+        clearInterval(timer)
+        setCountdown(null)
+        handleCapture()
+      }else{
+        setCountdown(timeLeft)
+      }
+    }, 1000)
+  }
+
+  // Fungsi Tombol Camera
+  const handleCamera = () =>{
+    if(image !== null){
+      setImage(null)
+    }else{
+      startCountdown()
     }
   }
 
@@ -111,7 +138,13 @@ export default function App() {
                 <img src={image} alt="model" className='h-full object-cover animate-appear'/>
               ) : (
                 <CameraComp ref={webcamRef} width={768} height={1024} />
-              )}
+              )}{
+                countdown !== null && (
+                  <div className='absolute top-0 left-14 w-96 h-full flex items-center justify-center text-8xl text-white animate-appear'>
+                    {countdown}
+                  </div>
+                )
+              }
             </div>
           </div>
         
@@ -125,7 +158,7 @@ export default function App() {
             
             {/* Tombol */}
             <div className="pb-3 flex justify-center gap-5">
-              <button className="btn w-1/4 bg-primary text-slate-100" onClick={handleCapture}>
+              <button className="btn w-1/4 bg-primary text-slate-100" onClick={handleCamera}>
                 <span className="material-symbols-outlined">photo_camera</span>
               </button>
 
