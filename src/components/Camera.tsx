@@ -1,18 +1,27 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import Webcam from "react-webcam";
 
 interface CameraComponents {
+    deviceId: string;
     width?: number;
     height?: number;
 }
 
 const CameraComp =  forwardRef<Webcam, CameraComponents>((
-    {width = 768, height = 1024}, ref) => {
-        const videoConstraints = {
+    {deviceId, width, height}, ref) => {
+        const [videoConstraints, setVideoConstraints] = useState({
             width,
             height,
-            facingMode: "user",
-        }
+            facingMode: "environment",
+            deviceId: deviceId,
+        })
+
+        useEffect(() => {
+            setVideoConstraints((prevConstraints) => ({
+                ...prevConstraints,
+                deviceId: deviceId
+            }))
+        }, [deviceId])
 
         return (
             <>

@@ -1,15 +1,55 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CameraComp from './components/Camera'
 import Webcam from "react-webcam"
+
+interface WebcamDevice {
+  deviceId: string;
+  kind: string;
+  label: string;
+  groupId: string;
+}
 
 export default function App() {
   const webcamRef = useRef<Webcam>(null)
   const [image, setImage] = useState<string | null>(null)
   const [garment, setGarment] = useState<string>('tshirt')
   const [model, setModel] = useState<File | null>(null)
+  const [webcams, setWebcams] = useState<WebcamDevice[]>([])
+  const [deviceid, setDeviceid] = useState<string>('')
   const [countdown, setCountdown] = useState<number | null>(null)
   const [fullStat,setFullstat] = useState<boolean>(false)
   const fullscreenRef = useRef<HTMLDivElement>(null)
+
+
+
+  useEffect(() => {
+    const getWebcams = async () => {
+      try{
+        const devices = await navigator.mediaDevices.enumerateDevices()
+
+        const videoDevices = devices.filter(device => device.kind === 'videoinput') as MediaDeviceInfo[]
+
+        const webcamlist: WebcamDevice[] = videoDevices.map(device => ({
+          deviceId: device.deviceId,
+          kind: device.kind,
+          label: device.label,
+          groupId: device.groupId,
+        }))
+
+        setWebcams(webcamlist)
+        if (webcamlist.length > 0){
+          setDeviceid(webcamlist[0].deviceId)
+        }
+      } catch (error) {
+        console.log("Error Fetching: ",error)
+      }
+    }
+    getWebcams()
+  }, [])
+
+  const handleSelectWebcam = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDeviceid(event.target.value)
+  }
 
   const handleFullscreen = () => {
     if (fullscreenRef.current) {
@@ -22,6 +62,7 @@ export default function App() {
       }
     }
   }
+
   // Fungsi ScreenShot Webcam
   const handleCapture = () => {
     if (webcamRef.current) {
@@ -133,14 +174,14 @@ export default function App() {
             </button>
 
             {/* Layout Webcam & Image */}
-            <div className='bg-white w-full mx-auto h-screen'>
+            <div className='bg-white w-4/5 mx-auto h-screen'>
               {image ? (
                 <img src={image} alt="model" className='h-full object-cover animate-appear'/>
               ) : (
-                <CameraComp ref={webcamRef} width={768} height={1024} />
+                <CameraComp deviceId={deviceid} ref={webcamRef} width={768} height={1024} />
               )}{
                 countdown !== null && (
-                  <div className='absolute top-0 left-14 w-96 h-full flex items-center justify-center text-8xl text-white animate-appear'>
+                  <div className='absolute top-0 left-0 w-1/2 h-full flex items-center justify-center text-8xl text-white animate-appear'>
                     {countdown}
                   </div>
                 )
@@ -158,6 +199,17 @@ export default function App() {
             
             {/* Tombol */}
             <div className="pb-3 flex justify-center gap-5">
+              {webcams.length > 0 ? (
+                <select value={deviceid} onChange={handleSelectWebcam} className='select bg-primary text-white'>
+                  {webcams.map((webcam) => (
+                    <option key={webcam.deviceId} value={webcam.deviceId}>
+                      {webcam.label || `Webcam ${webcam.deviceId}`}
+                    </option>
+                  ))}
+                </select> 
+              ): (
+                <p>No Webcams found.</p>
+              )}
               <button className="btn w-1/4 bg-primary text-slate-100" onClick={handleCamera}>
                 <span className="material-symbols-outlined">photo_camera</span>
               </button>
@@ -166,7 +218,7 @@ export default function App() {
             </div>
 
             {/* Select Option */}
-            <div className="ps-10 pt-5 flex flex-wrap gap-7 overflow-y-auto max-h-96">
+            <div className="ps-10 pt-5 flex flex-wrap gap-7 overflow-y-auto max-h-[560px]">
               
               {
                 tshirt.map((item)=> (
