@@ -20,7 +20,12 @@ export default function App() {
   const [fullStat,setFullstat] = useState<boolean>(false)
   const fullscreenRef = useRef<HTMLDivElement>(null)
 
-
+  let mwidth = ''
+  if (fullStat == true){
+    mwidth = 'max-h-[560px]'
+  }else {
+    mwidth = 'max-h-96'
+  }
 
   useEffect(() => {
     const getWebcams = async () => {
@@ -218,7 +223,7 @@ export default function App() {
             </div>
 
             {/* Select Option */}
-            <div className="ps-10 pt-5 flex flex-wrap gap-7 overflow-y-auto max-h-[560px]">
+            <div className={`ps-10 pt-5 flex flex-wrap gap-7 overflow-y-auto ${mwidth}`}>
               
               {
                 tshirt.map((item)=> (
